@@ -1,0 +1,24 @@
+Comment: Process Salesforce Appflow
+StartAt: Waiter
+States:
+
+  Waiter:
+    # Wait the file to be written
+    Type: Wait
+    Seconds: 2
+    Next: CopyDataToDataLake
+
+  CopyDataToDataLake:
+    Type: Task
+    Resource: ${self:custom.lambdaArnPrefix}-CopyDataToDataLake
+    Next: ExecutionSucceded
+    Catch:
+      - ErrorEquals:
+          - States.ALL
+        Next: ExecutionFailed
+
+  ExecutionSucceded:
+    Type: Succeed
+
+  ExecutionFailed:
+    Type: Fail

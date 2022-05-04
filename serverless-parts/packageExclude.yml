@@ -1,0 +1,8 @@
+- node_modules/**
+- venv/**
+- deploy.sh
+- .vscode/**
+- .git/**
+- layers/**
+- README.md
+- requirements.txt

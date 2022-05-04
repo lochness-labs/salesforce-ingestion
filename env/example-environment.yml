@@ -1,0 +1,19 @@
+AWS_ACCOUNT_ID: 012345678910
+AWS_REGION_NAME: eu-central-1
+
+# Buckets
+SRC_BUCKET_NAME: your-source-bucket-name
+DEST_BUCKET_NAME: your-destination-bucket-name
+ATHENA_OUTPUT_BUCKET_NAME: your-athena-query-result
+DEPLOYMENT_BUCKET: your-deployment-bucket-name
+
+# Zones
+SRC_BUCKET_PREFIX: intake/transition/salesforce
+DEST_BUCKET_PREFIX: intake/raw/salesforce
+
+ATHENA_RAW_DB: raw
+
+APPFLOW_CONNECTION_NAME: NameOfYourConnection
+
+# change the layer version accordingly or use serverless-latest-layer-version
+AWS_WRANGLER_LAYER_ARN: arn:aws:lambda:${aws:region}:${aws:accountId}:layer:layer-awswrangler:1

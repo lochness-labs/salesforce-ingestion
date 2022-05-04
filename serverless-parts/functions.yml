@@ -1,0 +1,18 @@
+
+TriggerSM:
+  handler: src/trigger_state_machine.handler
+  events:
+    - s3:
+        bucket: ${self:custom.properties.SRC_BUCKET_NAME}
+        existing: true # Must be added when bucket already exists
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: ${self:custom.properties.SRC_BUCKET_PREFIX}
+        #  - suffix: none
+  environment:
+    STATE_MACHINE_ARN: ${self:custom.mainStateMachineArn}
+
+CopyDataToDataLake:
+  handler: src/copy_salesforce_data_to_datalake.handler
+  layers:
+    - ${self:custom.properties.AWS_WRANGLER_LAYER_ARN}

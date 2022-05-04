@@ -1,0 +1,28 @@
+- Effect: Allow
+  Action:
+    - states:StartExecution
+  Resource:
+    - ${self:custom.mainStateMachineArn}
+
+- Effect: Allow
+  Action:
+    - s3:Get*
+    - s3:Delete*
+    - s3:List*
+    - s3:PutObject
+    - s3:AbortMultipartUpload
+  Resource:
+    - arn:aws:s3:::${self:custom.properties.SRC_BUCKET_NAME}
+    - arn:aws:s3:::${self:custom.properties.SRC_BUCKET_NAME}/*
+    - arn:aws:s3:::${self:custom.properties.DEST_BUCKET_NAME}
+    - arn:aws:s3:::${self:custom.properties.DEST_BUCKET_NAME}/*
+    - arn:aws:s3:::${self:custom.properties.ATHENA_OUTPUT_BUCKET_NAME}
+    - arn:aws:s3:::${self:custom.properties.ATHENA_OUTPUT_BUCKET_NAME}/*
+
+- Effect: Allow
+  Action:
+    - athena:StartQueryExecution
+    - athena:Get*
+    - glue:*
+  Resource:
+    - "*"

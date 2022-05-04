@@ -1,0 +1,7 @@
+{
+  "name": "ingestion-workflow",
+  "devDependencies": {
+    "serverless-python-requirements": "^5.4.0",
+    "serverless-step-functions": "^3.7.0"
+  }
+}

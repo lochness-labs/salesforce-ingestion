@@ -1,0 +1,45 @@
+service: salesforce-appflow-process
+
+variablesResolutionMode: 20210326
+
+provider:
+  name: aws
+  #lambdaHashingVersion: 20201221
+  runtime: python3.8
+  region: ${self:custom.properties.AWS_REGION_NAME}
+  deploymentBucket: ${self:custom.properties.DEPLOYMENT_BUCKET}
+  timeout: 900 # In seconds
+  stage: ${opt:stage}
+  environment: ${self:custom.properties}
+  iamRoleStatements:
+    ${file(./serverless-parts/iamRoleStatements.yml)}
+
+custom:
+  properties: ${file(env/${self:provider.stage}.yml)}
+
+  serviceAndStage: ${self:service}-${self:provider.stage}
+  mainStateMachineName: ${self:custom.serviceAndStage}
+  mainStateMachineArn: arn:aws:states:${aws:region}:${aws:accountId}:stateMachine:${self:custom.mainStateMachineName}
+  lambdaArnPrefix: arn:aws:lambda:${aws:region}:${aws:accountId}:function:${self:custom.serviceAndStage}
+
+  # SNS topics
+  successfulExecutionTopicName: ${self:custom.serviceAndStage}-success
+  failedExecutionTopicName: ${self:custom.serviceAndStage}-failed
+
+plugins:
+  - serverless-step-functions
+
+package:
+  exclude:
+    ${file(./serverless-parts/packageExclude.yml)}
+
+functions: ${file(./serverless-parts/functions.yml)}
+
+stepFunctions:
+  stateMachines:
+    AppflowSM:
+      name: ${self:custom.mainStateMachineName}
+      definition: ${file(./serverless-parts/stateMachine.yml)}
+
+resources:
+  ${file(env/${self:provider.stage}-appflow-resources.yml)}

@@ -1,0 +1,51 @@
+## Thanks to https://www.javaniceday.com/post/salesforce-integration-with-aws-appflow-s3-lambda-and-sqs
+
+Resources:
+
+  SalesforceCase:
+    Type: AWS::AppFlow::Flow
+    Properties:
+
+      FlowName: Case
+
+      TriggerConfig:
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appflow-flow-triggerconfig.html#cfn-appflow-flow-triggerconfig-triggertype
+        TriggerType: OnDemand
+
+      SourceFlowConfig:
+        ConnectorType: Salesforce
+
+        # the name of the Oauth connection manually created in AWS console
+        ConnectorProfileName: ${self:custom.properties.APPFLOW_CONNECTION_NAME}
+
+        SourceConnectorProperties:
+          Salesforce:
+            Object: Case
+            EnableDynamicFieldUpdate: false
+            IncludeDeletedRecords: true
+
+      DestinationFlowConfigList:
+        - ConnectorType: S3
+
+          # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appflow-flow-destinationconnectorproperties.html
+          DestinationConnectorProperties:
+            S3:
+              BucketName: ${self:custom.properties.SRC_BUCKET_NAME}
+              BucketPrefix: ${self:custom.properties.SRC_BUCKET_PREFIX}
+              S3OutputFormatConfig:
+                AggregationConfig:
+                  AggregationType: None
+                PrefixConfig:
+                  PrefixFormat: DAY
+                  PrefixType: PATH_AND_FILENAME
+                FileType: PARQUET
+
+      Tasks:
+        # https://stackoverflow.com/a/69887638/1992799
+        - TaskType: Map_all
+          SourceFields: []
+          TaskProperties:
+          - Key: EXCLUDE_SOURCE_FIELDS_LIST
+            Value: '[]'
+          ConnectorOperator:
+            Salesforce: NO_OP

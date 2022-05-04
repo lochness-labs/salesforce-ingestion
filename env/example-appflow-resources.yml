@@ -1,0 +1,7 @@
+- ${file(./serverless-parts/resources/OnDemandExample/appflow-Account.yml)}
+- ${file(./serverless-parts/resources/OnDemandExample/appflow-Case.yml)}
+
+# NOTE: the same resource can't be both OnDemand and Scheduled.
+
+# - ${file(./serverless-parts/resources/ScheduledExample/appflow-Case.yml)}
+# - ${file(./serverless-parts/resources/ScheduledExample/appflow-Account.yml)}

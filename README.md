@@ -89,7 +89,7 @@ The name of the files corresponds to the environment names. For example: copy `e
 - Add resources to `serverless-parts/resources/` following the examples inside the `OnDemandExample` folder.
     - Every yml file inside the subfolder represents a single Salesforce entity and a single Appflow Flow.
     - Each flow name must be alphanumeric (is. `SalesforceCase` is ok, `Salesforce_Case` is wrong)
-    - Scheduled flows must be manually activated (after the deploy they are in a Draft state). Go to `Amazon AppFlow` > `Flows` > yourFlow and click on `Activate`
+    - Scheduled flows must be manually activated (after the deploy they are in a Draft state). Go to `Amazon AppFlow` > `Flows` > yourFlow and click on `Activate`. They are scheduled at 2 AM using `serverless-parts/js/getScheduleStartTimeUnixtimestamp.js`
     - Flows with the same name but different mode (OnDemand, Scheduled) can't co-exists and will be replaced (for example if you first deploy an Ondeman flow and after a scheduled one)
 
 - Add the resources paths to `env/dev-appflow-resources.yml`

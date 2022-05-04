@@ -1,8 +1,13 @@
 - node_modules/**
 - venv/**
-- deploy.sh
 - .vscode/**
 - .git/**
-- layers/**
+- .gitignore
+- .serverless
 - README.md
 - requirements.txt
+- LICENSE
+- sailr.json
+- package.json
+- package-lock.json
+- env/**
